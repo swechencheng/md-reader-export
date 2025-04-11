@@ -4,6 +4,8 @@
 
 Extension that exports the md-reader rendered page to html
 
+<img alt="Markdown Reader Export screenshot" src="https://raw.githubusercontent.com/swechencheng/md-reader-export/main/images/md-reader-export-screenshot.png" align="middle" width="1280">
+
 ## Usage
 
 This extension depends on another extension [`md-reader`](https://github.com/md-reader/md-reader) on [chrome store](https://chromewebstore.google.com/detail/markdown-reader/medapdbncneneejhbgcjceippjlfkmkg).
