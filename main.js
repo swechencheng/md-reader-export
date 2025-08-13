@@ -97,11 +97,6 @@
         --color-button-bg-active: rgba(241, 241, 241, 0.5);
         --shadow-button-text: 0.5px 0.5px 1px rgba(0, 0, 0, 0.12);
         --color-button_copy: var(--color-button);
-        --color-button_copy-bg: var(--color-button-bg);
-        --color-button_copy-hover: var(--color-button-hover);
-        --color-button_copy-bg-hover: rgba(241, 241, 241, 0.8);
-        --color-button_copy-active: var(--color-button-active);
-        --color-button_copy-bg-active: rgba(241, 241, 241, 0.6);
         --size-scrollbar: 6.5px;
         --color-scrollbar-thumb: rgba(0, 0, 0, 0.25);
         --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.35);
@@ -239,12 +234,6 @@
           --color-button-active: rgba(181, 181, 184, 0.6);
           --color-button-bg-active: rgba(58, 60, 62, 0.3);
           --shadow-button-text: 0.5px 0.5px 1px rgba(0, 0, 0, 0.12);
-          --color-button_copy: rgba(181, 181, 184, 0.7);
-          --color-button_copy-bg: var(--color-button-bg);
-          --color-button_copy-hover: rgba(181, 181, 184, 0.9);
-          --color-button_copy-bg-hover: rgba(58, 60, 62, 0.8);
-          --color-button_copy-active: rgba(181, 181, 184, 0.9);
-          --color-button_copy-bg-active: rgba(58, 60, 62, 0.6);
           --size-scrollbar: 6.5px;
           --color-scrollbar-thumb: rgba(255, 255, 255, 0.25);
           --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.35);
@@ -815,7 +804,7 @@
         contentClone.className = 'markdown-content';
 
         // Remove any copy buttons, etc.
-        contentClone.querySelectorAll('.mdr-block-copy-btn, .mdr__anchor').forEach(el => {
+        contentClone.querySelectorAll('.mdr-block__copy-btn, .mdr__anchor').forEach(el => {
             el.remove();
         });
 
