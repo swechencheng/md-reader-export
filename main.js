@@ -62,9 +62,6 @@
         colorScheme.setAttribute('content', 'light dark');
         doc.head.appendChild(colorScheme);
 
-        // Set data-theme attribute on HTML element
-        doc.documentElement.setAttribute('data-theme', 'light');
-
         // Add the complete CSS from all.css
         const style = document.createElement('style');
         style.textContent = `
@@ -713,91 +710,12 @@
         }
       }
       
-      /* Dark mode toggle button */
-      .theme-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: rgba(200, 200, 200, 0.2);
-        color: var(--color-text-primary);
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        transition: background 0.3s;
-      }
-      
-      .theme-toggle:hover {
-        background: rgba(200, 200, 200, 0.3);
-      }
-      
-      .theme-toggle svg {
-        width: 24px;
-        height: 24px;
-        fill: currentColor;
-      }
-      
-      [data-theme="light"] .theme-toggle .sun-icon {
-        display: none;
-      }
-      
-      [data-theme="light"] .theme-toggle .moon-icon {
-        display: block;
-      }
-      
-      [data-theme="dark"] .theme-toggle .sun-icon {
-        display: block;
-      }
-      
-      [data-theme="dark"] .theme-toggle .moon-icon {
-        display: none;
-      }
-      
-      /* Back-to-top button */
-      .back-to-top {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 999;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--primary-color);
-        color: white;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        font-size: 20px;
-      }
       `;
 
         doc.head.appendChild(style);
 
         // Create body structure
         doc.body.className = '';
-
-        // Add theme toggle button
-        const themeToggle = document.createElement('button');
-        themeToggle.className = 'theme-toggle';
-        themeToggle.setAttribute('aria-label', 'Toggle theme');
-        themeToggle.innerHTML = `
-        <svg class="sun-icon" viewBox="0 0 24 24">
-          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"></path>
-        </svg>
-        <svg class="moon-icon" viewBox="0 0 24 24">
-          <path d="M9.5,2c-1.82,0-3.53,0.5-5,1.35c2.99,1.73,5,4.95,5,8.65s-2.01,6.92-5,8.65C5.97,21.5,7.68,22,9.5,22c5.52,0,10-4.48,10-10S15.02,2,9.5,2z"></path>
-        </svg>
-      `;
-        doc.body.appendChild(themeToggle);
 
         // Clone and clean content
         const contentClone = content.cloneNode(true);
@@ -810,87 +728,6 @@
 
         // Add content to the document
         doc.body.appendChild(contentClone);
-
-        // Add back to top button
-        const backToTop = document.createElement('button');
-        backToTop.className = 'back-to-top';
-        backToTop.setAttribute('aria-label', 'Back to top');
-        backToTop.innerHTML = '↑';
-        doc.body.appendChild(backToTop);
-
-        // Add scripts for functionality
-        const script = document.createElement('script');
-        script.textContent = `
-        document.addEventListener('DOMContentLoaded', function() {
-          // Theme toggle
-          const themeToggle = document.querySelector('.theme-toggle');
-          if (themeToggle) {
-            themeToggle.addEventListener('click', function() {
-              const html = document.documentElement;
-              const currentTheme = html.getAttribute('data-theme') || 'light';
-              const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-              
-              html.setAttribute('data-theme', newTheme);
-              localStorage.setItem('md-reader-theme', newTheme);
-            });
-          }
-          
-          // Initialize theme based on preference
-          const storedTheme = localStorage.getItem('md-reader-theme');
-          if (storedTheme) {
-            document.documentElement.setAttribute('data-theme', storedTheme);
-          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-          }
-          
-          // Back to top button
-          const backToTop = document.querySelector('.back-to-top');
-          if (backToTop) {
-            window.addEventListener('scroll', function() {
-              if (window.scrollY > 300) {
-                backToTop.style.display = 'flex';
-              } else {
-                backToTop.style.display = 'none';
-              }
-            });
-            
-            backToTop.addEventListener('click', function() {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-          }
-          
-          // Add heading anchors
-          document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(heading => {
-            if (!heading.id) {
-              const id = heading.textContent
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-|-$/g, '');
-              heading.id = id;
-            }
-            
-            const link = document.createElement('a');
-            link.href = '#' + heading.id;
-            link.className = 'heading-anchor';
-            link.innerHTML = ' #';
-            link.style.opacity = '0';
-            link.style.textDecoration = 'none';
-            link.style.marginLeft = '0.2em';
-            link.style.transition = 'opacity 0.2s';
-            
-            heading.appendChild(link);
-            
-            heading.addEventListener('mouseenter', () => {
-              link.style.opacity = '0.5';
-            });
-            
-            heading.addEventListener('mouseleave', () => {
-              link.style.opacity = '0';
-            });
-          });
-        });
-      `;
-        doc.body.appendChild(script);
 
         // Handle syntax highlighting if present
         if (contentClone.querySelectorAll('pre code').length > 0) {
