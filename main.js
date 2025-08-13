@@ -1,16 +1,16 @@
 (function () {
-    // One-time initialization function
-    function initialize() {
-        // Only create the button if it doesn't exist
-        if (document.querySelector('#md-export-btn')) {
-            return;
-        }
+  // One-time initialization function
+  function initialize() {
+    // Only create the button if it doesn't exist
+    if (document.querySelector('#md-export-btn')) {
+      return;
+    }
 
-        // Create export button
-        const btn = document.createElement('button');
-        btn.id = 'md-export-btn';
-        btn.innerHTML = 'Export HTML';
-        btn.style.cssText = `
+    // Create export button
+    const btn = document.createElement('button');
+    btn.id = 'md-export-btn';
+    btn.innerHTML = 'Export HTML';
+    btn.style.cssText = `
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -26,45 +26,45 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       `;
 
-        // Single click handler - won't be duplicated
-        btn.addEventListener('click', exportMarkdown);
+    // Single click handler - won't be duplicated
+    btn.addEventListener('click', exportMarkdown);
 
-        // Add to page
-        document.body.appendChild(btn);
+    // Add to page
+    document.body.appendChild(btn);
+  }
+
+  // Export function
+  function exportMarkdown() {
+    console.log('Starting export...');
+
+    // Get content
+    const content = document.querySelector('.mdr-content');
+    if (!content) {
+      alert('Could not find markdown content to export');
+      return;
     }
 
-    // Export function
-    function exportMarkdown() {
-        console.log('Starting export...');
+    // Create HTML document
+    const doc = document.implementation.createHTMLDocument(document.title || 'Exported Markdown');
 
-        // Get content
-        const content = document.querySelector('.mdr-content');
-        if (!content) {
-            alert('Could not find markdown content to export');
-            return;
-        }
+    // Add meta tags
+    const meta = document.createElement('meta');
+    meta.setAttribute('charset', 'UTF-8');
+    doc.head.appendChild(meta);
 
-        // Create HTML document
-        const doc = document.implementation.createHTMLDocument(document.title || 'Exported Markdown');
+    const viewport = document.createElement('meta');
+    viewport.setAttribute('name', 'viewport');
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+    doc.head.appendChild(viewport);
 
-        // Add meta tags
-        const meta = document.createElement('meta');
-        meta.setAttribute('charset', 'UTF-8');
-        doc.head.appendChild(meta);
+    const colorScheme = document.createElement('meta');
+    colorScheme.setAttribute('name', 'color-scheme');
+    colorScheme.setAttribute('content', 'light dark');
+    doc.head.appendChild(colorScheme);
 
-        const viewport = document.createElement('meta');
-        viewport.setAttribute('name', 'viewport');
-        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
-        doc.head.appendChild(viewport);
-
-        const colorScheme = document.createElement('meta');
-        colorScheme.setAttribute('name', 'color-scheme');
-        colorScheme.setAttribute('content', 'light dark');
-        doc.head.appendChild(colorScheme);
-
-        // Add the complete CSS from all.css
-        const style = document.createElement('style');
-        style.textContent = `
+    // Add the complete CSS from all.css
+    const style = document.createElement('style');
+    style.textContent = `
       :root {
         --color-white: #fff;
         --color-primary: #607cd2;
@@ -712,97 +712,97 @@
       
       `;
 
-        doc.head.appendChild(style);
+    doc.head.appendChild(style);
 
-        // Create body structure
-        doc.body.className = '';
+    // Create body structure
+    doc.body.className = '';
 
-        // Clone and clean content
-        const contentClone = content.cloneNode(true);
-        contentClone.className = 'markdown-content';
+    // Clone and clean content
+    const contentClone = content.cloneNode(true);
+    contentClone.className = 'markdown-content';
 
-        // Remove any copy buttons, etc.
-        contentClone.querySelectorAll('.mdr-block__copy-btn, .mdr__anchor').forEach(el => {
-            el.remove();
-        });
+    // Remove any copy buttons, etc.
+    contentClone.querySelectorAll('.mdr-block__copy-btn, .mdr__anchor').forEach(el => {
+      el.remove();
+    });
 
-        // Add content to the document
-        doc.body.appendChild(contentClone);
+    // Add content to the document
+    doc.body.appendChild(contentClone);
 
-        // Handle syntax highlighting if present
-        if (contentClone.querySelectorAll('pre code').length > 0) {
-            const highlightCSS = document.createElement('link');
-            highlightCSS.rel = 'stylesheet';
-            highlightCSS.href = 'https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css';
-            doc.head.appendChild(highlightCSS);
+    // Handle syntax highlighting if present
+    if (contentClone.querySelectorAll('pre code').length > 0) {
+      const highlightCSS = document.createElement('link');
+      highlightCSS.rel = 'stylesheet';
+      highlightCSS.href = 'https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github.min.css';
+      doc.head.appendChild(highlightCSS);
 
-            const highlightScript = document.createElement('script');
-            highlightScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11/lib/highlight.min.js';
-            highlightScript.defer = true;
-            doc.head.appendChild(highlightScript);
+      const highlightScript = document.createElement('script');
+      highlightScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11/lib/highlight.min.js';
+      highlightScript.defer = true;
+      doc.head.appendChild(highlightScript);
 
-            const initHighlightScript = document.createElement('script');
-            initHighlightScript.textContent = `
+      const initHighlightScript = document.createElement('script');
+      initHighlightScript.textContent = `
           document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('pre code').forEach((el) => {
               hljs.highlightElement(el);
             });
           });
         `;
-            doc.body.appendChild(initHighlightScript);
-        }
+      doc.body.appendChild(initHighlightScript);
+    }
 
-        // Handle mermaid diagrams if present
-        if (contentClone.querySelector('.mermaid')) {
-            const mermaidScript = document.createElement('script');
-            mermaidScript.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
-            mermaidScript.defer = true;
-            doc.head.appendChild(mermaidScript);
+    // Handle mermaid diagrams if present
+    if (contentClone.querySelector('.mermaid')) {
+      const mermaidScript = document.createElement('script');
+      mermaidScript.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+      mermaidScript.defer = true;
+      doc.head.appendChild(mermaidScript);
 
-            const initMermaidScript = document.createElement('script');
-            initMermaidScript.textContent = `
+      const initMermaidScript = document.createElement('script');
+      initMermaidScript.textContent = `
           document.addEventListener('DOMContentLoaded', () => {
             mermaid.initialize({ startOnLoad: true });
           });
         `;
-            doc.body.appendChild(initMermaidScript);
-        }
-
-        // Generate HTML string
-        const htmlString = '<!DOCTYPE html>\n' + new XMLSerializer().serializeToString(doc);
-
-        // Download the HTML file
-        const fileName = (document.title || 'exported-markdown').toLowerCase().replace(/[^a-z0-9]/g, '-') + '.html';
-        downloadFile(htmlString, fileName, 'text/html');
+      doc.body.appendChild(initMermaidScript);
     }
 
-    // Helper function to download a file
-    function downloadFile(content, fileName, contentType) {
-        const blob = new Blob([content], { type: contentType });
-        const url = URL.createObjectURL(blob);
+    // Generate HTML string
+    const htmlString = '<!DOCTYPE html>\n' + new XMLSerializer().serializeToString(doc);
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        a.style.display = 'none';
+    // Download the HTML file
+    const fileName = (document.title || 'exported-markdown').toLowerCase().replace(/[^a-z0-9]/g, '-') + '.html';
+    downloadFile(htmlString, fileName, 'text/html');
+  }
 
-        // Use a different approach to avoid duplicate downloads
-        document.body.appendChild(a);
-        a.onclick = function () {
-            // Clean up after a slight delay to ensure the download starts
-            setTimeout(() => {
-                URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-            }, 150);
-        };
+  // Helper function to download a file
+  function downloadFile(content, fileName, contentType) {
+    const blob = new Blob([content], { type: contentType });
+    const url = URL.createObjectURL(blob);
 
-        a.click();
-    }
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.style.display = 'none';
 
-    // Initialize only once
-    if (document.readyState === 'complete') {
-        initialize();
-    } else {
-        window.addEventListener('load', initialize, { once: true });
-    }
+    // Use a different approach to avoid duplicate downloads
+    document.body.appendChild(a);
+    a.onclick = function () {
+      // Clean up after a slight delay to ensure the download starts
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }, 150);
+    };
+
+    a.click();
+  }
+
+  // Initialize only once
+  if (document.readyState === 'complete') {
+    initialize();
+  } else {
+    window.addEventListener('load', initialize, { once: true });
+  }
 })();
